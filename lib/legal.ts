@@ -19,7 +19,11 @@ export interface LegalApp {
 }
 
 export const legalApps: LegalApp[] = [
-  { slug: "pomodoro-elite", name: "Pomodoro Elite", docs: { privacy: ["en"] } },
+  {
+    slug: "pomodoro-elite",
+    name: "Pomodoro Elite",
+    docs: { privacy: ["tr", "en"], "delete-account": ["tr", "en"] },
+  },
   { slug: "lotus", name: "Lotus", docs: { privacy: ["tr", "en"], "delete-account": ["tr", "en"] } },
   { slug: "wallet-elite", name: "Wallet Elite", docs: { privacy: ["tr", "en"] } },
 ];
