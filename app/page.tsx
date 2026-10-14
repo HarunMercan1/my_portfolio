@@ -62,7 +62,7 @@ function Hero() {
                     />
                     <Link
                         href={`/apps/${featured.slug}/`}
-                        className="absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-3 whitespace-nowrap rounded-2xl border border-line bg-surface py-2.5 pl-2.5 pr-4 shadow-card hover:border-fg-3 transition-colors"
+                        className="absolute bottom-0 left-1/2 flex w-max -translate-x-1/2 items-center gap-3 whitespace-nowrap rounded-2xl border border-line bg-surface py-2.5 pl-2.5 pr-4 shadow-card hover:border-fg-3 transition-colors"
                     >
                         <Image src={`/apps/${featured.slug}/icon.png`} alt="" width={40} height={40} className="rounded-xl" />
                         <span className="text-sm leading-tight">
