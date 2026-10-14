@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { apps } from "@/lib/apps";
+import { legalApps } from "@/lib/legal";
 import { site } from "@/lib/site";
 import { Logo } from "./Logo";
 
@@ -25,9 +26,9 @@ export function Footer() {
                 </FooterColumn>
 
                 <FooterColumn title="Gizlilik">
-                    {apps.map((app) => (
+                    {legalApps.map((app) => (
                         <FooterLink key={app.slug} href={`/apps/${app.slug}/privacy/`}>
-                            {app.name} Gizlilik
+                            {app.name}
                         </FooterLink>
                     ))}
                 </FooterColumn>

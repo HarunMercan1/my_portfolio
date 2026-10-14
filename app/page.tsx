@@ -1,12 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, FlaskConical, GraduationCap, Mail, MapPin, Wrench } from "lucide-react";
-import { apps, upcomingCount } from "@/lib/apps";
+import { apps } from "@/lib/apps";
+import { legalApps } from "@/lib/legal";
 import { site } from "@/lib/site";
 import { ButtonLink, Phone, PlayButton, Rating, SectionHeading } from "@/components/site/ui";
 import { ContactForm } from "@/components/site/ContactForm";
 
 const featured = apps[0];
+// Apps that have legal pages but no public listing yet are in closed testing.
+const upcomingCount = legalApps.filter((l) => !apps.some((a) => a.slug === l.slug)).length;
 
 export default function Home() {
     return (
