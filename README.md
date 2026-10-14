@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mercan Software
 
-## Getting Started
+Mercan Software'in web sitesi: uygulama tanıtım sayfaları ve gizlilik politikaları.
 
-First, run the development server:
+Next.js (statik export) + Tailwind CSS. Cloudflare Pages üzerinde yayınlanır.
+
+## Geliştirme
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Site http://localhost:3000 adresinde açılır.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Yeni uygulama ekleme
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. `lib/apps.ts` içindeki `apps` listesine yeni bir kayıt ekle.
+2. Simge ve ekran görüntülerini `public/apps/<slug>/` klasörüne koy (`icon.png`, `screen-1.png`, ...).
+3. Sayfalar otomatik oluşur:
+   - `/apps/<slug>/` – tanıtım sayfası
+   - `/apps/<slug>/privacy/` – gizlilik politikası (Play Console'a bu link verilir)
 
-## Learn More
+## Yayın
 
-To learn more about Next.js, take a look at the following resources:
+`npm run build` siteyi `out/` klasörüne statik HTML olarak üretir. Cloudflare Pages ayarları:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Build command: `npm run build`
+- Build output directory: `out`
