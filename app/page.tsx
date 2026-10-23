@@ -4,12 +4,12 @@ import { ArrowRight, FlaskConical, GraduationCap, Mail, MapPin, Wrench } from "l
 import { apps } from "@/lib/apps";
 import { legalApps } from "@/lib/legal";
 import { site } from "@/lib/site";
-import { ButtonLink, Phone, PlayButton, Rating, SectionHeading } from "@/components/site/ui";
+import { ButtonLink, Phone, PlayButton, Rating, ReviewMarquee, SectionHeading } from "@/components/site/ui";
 import { ContactForm } from "@/components/site/ContactForm";
 
 const featured = apps[0];
 // Apps that have legal pages but no public listing yet are in closed testing.
-const upcomingCount = legalApps.filter((l) => !apps.some((a) => a.slug === l.slug)).length;
+const upcoming = legalApps.filter((l) => !apps.some((a) => a.slug === l.slug));
 
 export default function Home() {
     return (
@@ -134,7 +134,7 @@ function Apps() {
                                 </ul>
 
                                 <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-fg-2">
-                                    <Rating value={app.stats.rating} reviews={app.stats.reviews} />
+                                    {app.stats.rating && <Rating value={app.stats.rating} reviews={app.stats.reviews} />}
                                     <span>{app.stats.downloads} indirme</span>
                                 </div>
 
@@ -156,22 +156,38 @@ function Apps() {
                                         key={src}
                                         src={src}
                                         alt={`${app.name} ekran görüntüsü ${i + 3}`}
+                                        framed={app.framedScreenshots}
                                         className={`w-[30%] max-w-[170px] ${i === 1 ? "translate-y-0" : "translate-y-8"}`}
                                     />
                                 ))}
                             </div>
+
+                            {app.reviews && (
+                                <div className="lg:col-span-2 border-t border-line bg-surface-2 py-6">
+                                    <h4 className="sr-only">{app.name} kullanıcı yorumları</h4>
+                                    <ReviewMarquee reviews={app.reviews} />
+                                </div>
+                            )}
                         </article>
                     ))}
 
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-4 rounded-3xl border border-dashed border-line p-7 md:p-8">
+                    <div className="flex flex-col sm:flex-row gap-4 rounded-3xl border border-dashed border-line p-7 md:p-8">
                         <div className="grid place-items-center w-12 h-12 shrink-0 rounded-2xl bg-coral-soft text-coral-strong">
                             <FlaskConical className="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 className="font-display text-lg font-bold">Yolda: {upcomingCount} yeni uygulama</h3>
+                            <h3 className="font-display text-lg font-bold">Yolda: {upcoming.length} yeni uygulama</h3>
                             <p className="text-fg-2">
                                 Şu an kapalı testteler. Yayına çıktıklarında burada olacaklar.
                             </p>
+                            <ul className="mt-4 space-y-2">
+                                {upcoming.map((app) => (
+                                    <li key={app.slug}>
+                                        <span className="font-semibold">{app.name}</span>
+                                        {app.tagline && <span className="text-fg-2"> · {app.tagline}</span>}
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -182,7 +198,7 @@ function Apps() {
 
 function About() {
     const facts = [
-        { icon: GraduationCap, text: "Gazi Üniversitesi · Bilgisayar Mühendisliği" },
+        { icon: GraduationCap, text: "Gazi Üniversitesi · Bilgisayar Mühendisliği, 4. sınıf öğrencisi" },
         { icon: MapPin, text: "Ankara, Türkiye" },
         { icon: Wrench, text: "Flutter · Dart · Supabase" },
     ];

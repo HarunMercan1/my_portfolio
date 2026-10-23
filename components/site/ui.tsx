@@ -53,12 +53,22 @@ export function Phone({
     alt,
     className = "",
     priority,
+    framed,
 }: {
     src: string;
     alt: string;
     className?: string;
     priority?: boolean;
+    /** The image already has its own device frame; skip ours. */
+    framed?: boolean;
 }) {
+    if (framed) {
+        return (
+            <div className={`overflow-hidden rounded-[1.6rem] shadow-phone ${className}`}>
+                <Image src={src} alt={alt} width={540} height={960} priority={priority} className="block w-full h-auto" />
+            </div>
+        );
+    }
     return (
         <div className={`rounded-[2rem] bg-[#0c0b0a] p-[7px] shadow-phone ${className}`}>
             <Image
@@ -97,6 +107,31 @@ export function SectionHeading({
             <p className="eyebrow mb-3">{eyebrow}</p>
             <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight">{title}</h2>
             {text && <p className="mt-4 text-fg-2 text-lg leading-relaxed">{text}</p>}
+        </div>
+    );
+}
+
+/** Auto-scrolling strip of 5-star reviews; pauses on hover, static for reduced motion. */
+export function ReviewMarquee({ reviews }: { reviews: { author: string; text: string }[] }) {
+    return (
+        <div className="marquee overflow-hidden">
+            <ul className="marquee-track flex w-max gap-4">
+                {[...reviews, ...reviews].map((r, i) => (
+                    <li
+                        key={i}
+                        aria-hidden={i >= reviews.length || undefined}
+                        className="w-[300px] shrink-0 rounded-2xl border border-line bg-surface p-5"
+                    >
+                        <div className="flex gap-0.5" aria-label="5 yıldız">
+                            {Array.from({ length: 5 }, (_, j) => (
+                                <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                            ))}
+                        </div>
+                        <p className="mt-3 text-sm text-fg-2 leading-relaxed line-clamp-4">“{r.text}”</p>
+                        <p className="mt-3 text-sm font-semibold">{r.author}</p>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 }

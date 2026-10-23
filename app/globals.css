@@ -217,12 +217,39 @@ body {
 .rise-3 { animation-delay: 0.24s; }
 .rise-4 { animation-delay: 0.32s; }
 
+/* Reviews strip: the track holds the list twice, so sliding by half loops seamlessly. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+
+.marquee-track {
+  animation: marquee 60s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
   .rise {
+    animation: none;
+  }
+
+  .marquee {
+    overflow-x: auto;
+  }
+
+  .marquee-track {
     animation: none;
   }
 }

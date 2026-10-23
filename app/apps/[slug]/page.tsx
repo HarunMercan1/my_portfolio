@@ -6,19 +6,24 @@ import {
     ArrowLeft,
     BarChart3,
     Bell,
+    ChartPie,
     Cloud,
+    Download,
     Flame,
+    Handshake,
     Languages,
     Mail,
     Music,
     Palette,
+    Repeat,
     ShieldCheck,
     SlidersHorizontal,
+    Wallet,
     type LucideIcon,
 } from "lucide-react";
 import { apps, getApp, type FeatureIcon } from "@/lib/apps";
 import { site } from "@/lib/site";
-import { Phone, PlayButton, Rating } from "@/components/site/ui";
+import { Phone, PlayButton, Rating, ReviewMarquee } from "@/components/site/ui";
 
 const featureIcons: Record<FeatureIcon, LucideIcon> = {
     palette: Palette,
@@ -29,6 +34,11 @@ const featureIcons: Record<FeatureIcon, LucideIcon> = {
     sliders: SlidersHorizontal,
     languages: Languages,
     cloud: Cloud,
+    wallet: Wallet,
+    pie: ChartPie,
+    repeat: Repeat,
+    handshake: Handshake,
+    download: Download,
 };
 
 type Props = { params: Promise<{ slug: string }> };
@@ -77,7 +87,7 @@ export default async function AppPage({ params }: Props) {
                                 {app.subtitle} · {site.name}
                             </p>
                             <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1 text-sm text-fg-2">
-                                <Rating value={app.stats.rating} reviews={app.stats.reviews} />
+                                {app.stats.rating && <Rating value={app.stats.rating} reviews={app.stats.reviews} />}
                                 <span>{app.stats.downloads} indirme</span>
                                 <span>{app.category}</span>
                             </div>
@@ -107,6 +117,7 @@ export default async function AppPage({ params }: Props) {
                                 key={src}
                                 src={src}
                                 alt={`${app.name} ekran görüntüsü ${i + 1}`}
+                                framed={app.framedScreenshots}
                                 className="w-[200px] md:w-[220px] shrink-0 !shadow-card"
                                 priority={i < 2}
                             />
@@ -114,6 +125,18 @@ export default async function AppPage({ params }: Props) {
                     </div>
                 </div>
             </section>
+
+            {app.reviews && (
+                <section className="border-b border-line py-12 md:py-16">
+                    <div className="container-page">
+                        <p className="eyebrow mb-3">Yorumlar</p>
+                        <h2 className="font-display text-3xl font-bold tracking-tight">Kullanıcılar ne diyor?</h2>
+                    </div>
+                    <div className="mt-8">
+                        <ReviewMarquee reviews={app.reviews} />
+                    </div>
+                </section>
+            )}
 
             <section className="container-page py-16 md:py-24">
                 <div className="grid gap-12 lg:grid-cols-[1fr_2fr]">

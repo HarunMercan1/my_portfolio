@@ -15,6 +15,8 @@ export type LegalKind = "privacy" | "delete-account";
 export interface LegalApp {
   slug: string;
   name: string;
+  /** One-line description, shown on the home page while the app is in closed testing. */
+  tagline?: string;
   docs: Partial<Record<LegalKind, Lang[]>>;
 }
 
@@ -24,7 +26,12 @@ export const legalApps: LegalApp[] = [
     name: "Pomodoro Elite",
     docs: { privacy: ["tr", "en"], "delete-account": ["tr", "en"] },
   },
-  { slug: "lotus", name: "Lotus", docs: { privacy: ["tr", "en"], "delete-account": ["tr", "en"] } },
+  {
+    slug: "lotus",
+    name: "Lotus",
+    tagline: "İzlediğin dizi ve filmleri takip et, puanla, arkadaşlarınla ve topluluklarla paylaş.",
+    docs: { privacy: ["tr", "en"], "delete-account": ["tr", "en"] },
+  },
   { slug: "wallet-elite", name: "Wallet Elite", docs: { privacy: ["tr", "en"] } },
 ];
 
