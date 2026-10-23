@@ -1,9 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Star } from "lucide-react";
+import { useLang } from "@/lib/i18n";
 
 /** Google Play–style download button. */
 export function PlayButton({ href, size = "md" }: { href: string; size?: "md" | "lg" }) {
+    const { t } = useLang();
     const pad = size === "lg" ? "pl-4 pr-6 py-3" : "pl-3.5 pr-5 py-2.5";
     return (
         <a
@@ -16,7 +20,7 @@ export function PlayButton({ href, size = "md" }: { href: string; size?: "md" | 
                 <path d="M4 2.8v18.4c0 .6.6 1 1.1.7l15.6-9.2c.5-.3.5-1 0-1.3L5.1 2.1C4.6 1.8 4 2.2 4 2.8Z" fill="currentColor" />
             </svg>
             <span className="text-left leading-tight">
-                <span className="block text-[11px] opacity-70">Hemen indir</span>
+                <span className="block text-[11px] opacity-70">{t("Hemen indir", "Get it on")}</span>
                 <span className="block text-sm font-semibold">Google Play</span>
             </span>
         </a>
@@ -84,11 +88,12 @@ export function Phone({
 }
 
 export function Rating({ value, reviews }: { value: string; reviews?: string }) {
+    const { t, num } = useLang();
     return (
         <span className="inline-flex items-center gap-1.5">
             <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-            <span className="font-semibold">{value}</span>
-            {reviews && <span className="text-fg-3">({reviews} yorum)</span>}
+            <span className="font-semibold">{num(value)}</span>
+            {reviews && <span className="text-fg-3">({reviews} {t("yorum", "reviews")})</span>}
         </span>
     );
 }
@@ -113,6 +118,7 @@ export function SectionHeading({
 
 /** Auto-scrolling strip of 5-star reviews; pauses on hover, static for reduced motion. */
 export function ReviewMarquee({ reviews }: { reviews: { author: string; text: string }[] }) {
+    const { t } = useLang();
     return (
         <div className="marquee overflow-hidden">
             <ul className="marquee-track flex w-max gap-4">
@@ -122,12 +128,12 @@ export function ReviewMarquee({ reviews }: { reviews: { author: string; text: st
                         aria-hidden={i >= reviews.length || undefined}
                         className="w-[300px] shrink-0 rounded-2xl border border-line bg-surface p-5"
                     >
-                        <div className="flex gap-0.5" aria-label="5 yıldız">
+                        <div className="flex gap-0.5" aria-label={t("5 yıldız", "5 stars")}>
                             {Array.from({ length: 5 }, (_, j) => (
                                 <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
                             ))}
                         </div>
-                        <p className="mt-3 text-sm text-fg-2 leading-relaxed line-clamp-4">“{r.text}”</p>
+                        <p lang="tr" className="mt-3 text-sm text-fg-2 leading-relaxed line-clamp-4">“{r.text}”</p>
                         <p className="mt-3 text-sm font-semibold">{r.author}</p>
                     </li>
                 ))}

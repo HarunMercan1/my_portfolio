@@ -1,9 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, FlaskConical, GraduationCap, Mail, MapPin, Wrench } from "lucide-react";
 import { apps } from "@/lib/apps";
 import { legalApps } from "@/lib/legal";
 import { site } from "@/lib/site";
+import { useLang } from "@/lib/i18n";
 import { ButtonLink, Phone, PlayButton, Rating, ReviewMarquee, SectionHeading } from "@/components/site/ui";
 import { ContactForm } from "@/components/site/ContactForm";
 
@@ -23,30 +26,35 @@ export default function Home() {
 }
 
 function Hero() {
+    const { t, num } = useLang();
     return (
         <section className="relative overflow-hidden">
             <div className="absolute inset-0 dots opacity-60 [mask-image:radial-gradient(ellipse_at_70%_40%,black,transparent_70%)]" />
             <div className="container-page relative grid items-center gap-12 py-16 md:py-24 lg:grid-cols-[1.1fr_1fr]">
                 <div>
-                    <p className="rise eyebrow mb-5">Bağımsız mobil uygulama stüdyosu</p>
+                    <p className="rise eyebrow mb-5">{t("Bağımsız mobil uygulama stüdyosu", "Independent mobile app studio")}</p>
                     <h1 className="rise rise-1 font-display text-[2.6rem] leading-[1.05] sm:text-6xl md:text-7xl font-bold tracking-tight">
-                        Küçük ama <span className="text-coral">özenle</span> yapılmış uygulamalar.
+                        {t("Küçük ama ", "Small but ")}
+                        <span className="text-coral">{t("özenle", "carefully")}</span>
+                        {t(" yapılmış uygulamalar.", " crafted apps.")}
                     </h1>
                     <p className="rise rise-2 mt-6 max-w-xl text-lg md:text-xl text-fg-2 leading-relaxed">
-                        Mercan Software, günlük hayatı kolaylaştıran sade ve hızlı Android uygulamaları geliştirir.
-                        Fazlası yok, eksiği yok.
+                        {t(
+                            "Mercan Software, günlük hayatı kolaylaştıran sade ve hızlı Android uygulamaları geliştirir. Fazlası yok, eksiği yok.",
+                            "Mercan Software builds simple, fast Android apps that make everyday life easier. Nothing more, nothing less.",
+                        )}
                     </p>
                     <div className="rise rise-3 mt-8 flex flex-wrap gap-3">
-                        <ButtonLink href="/#apps">Uygulamaları keşfet</ButtonLink>
+                        <ButtonLink href="/#apps">{t("Uygulamaları keşfet", "Explore the apps")}</ButtonLink>
                         <ButtonLink href="/#contact" variant="ghost">
-                            İletişime geç
+                            {t("İletişime geç", "Get in touch")}
                         </ButtonLink>
                     </div>
 
                     <dl className="rise rise-4 mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-line pt-6">
-                        <Stat value={`${featured.stats.rating}★`} label="Play puanı" />
-                        <Stat value={featured.stats.downloads} label="İndirme" />
-                        <Stat value={featured.stats.languages} label="Dil desteği" />
+                        <Stat value={`${num(featured.stats.rating ?? "")}★`} label={t("Play puanı", "Play rating")} />
+                        <Stat value={num(featured.stats.downloads)} label={t("İndirme", "Downloads")} />
+                        <Stat value={featured.stats.languages} label={t("Dil desteği", "Languages")} />
                     </dl>
                 </div>
 
@@ -54,12 +62,12 @@ function Hero() {
                     <div className="absolute left-1/2 top-1/2 h-[80%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-coral-soft" />
                     <Phone
                         src={featured.screenshots[0]}
-                        alt={`${featured.name} ana ekranı`}
+                        alt={t(`${featured.name} ana ekranı`, `${featured.name} home screen`)}
                         className="absolute left-[4%] top-[8%] w-[46%] -rotate-6"
                     />
                     <Phone
                         src={featured.screenshots[1]}
-                        alt={`${featured.name} sayaç ekranı`}
+                        alt={t(`${featured.name} sayaç ekranı`, `${featured.name} timer screen`)}
                         className="absolute right-[4%] top-0 w-[50%] rotate-3"
                         priority
                     />
@@ -70,7 +78,7 @@ function Hero() {
                         <Image src={`/apps/${featured.slug}/icon.png`} alt="" width={40} height={40} className="rounded-xl" />
                         <span className="text-sm leading-tight">
                             <span className="block font-semibold">{featured.name}</span>
-                            <span className="block text-fg-3">Google Play&apos;de yayında</span>
+                            <span className="block text-fg-3">{t("Google Play'de yayında", "Available on Google Play")}</span>
                         </span>
                     </Link>
                 </div>
@@ -90,13 +98,17 @@ function Stat({ value, label }: { value: string; label: string }) {
 }
 
 function Apps() {
+    const { lang, t, num } = useLang();
     return (
         <section id="apps" className="py-20 md:py-28 border-t border-line">
             <div className="container-page">
                 <SectionHeading
-                    eyebrow="Uygulamalar"
-                    title="Şu an yayında olanlar"
-                    text="Her uygulama tek bir işi en iyi şekilde yapmak için tasarlanıyor."
+                    eyebrow={t("Uygulamalar", "Apps")}
+                    title={t("Şu an yayında olanlar", "Live right now")}
+                    text={t(
+                        "Her uygulama tek bir işi en iyi şekilde yapmak için tasarlanıyor.",
+                        "Each app is designed to do one job as well as possible.",
+                    )}
                 />
 
                 <div className="mt-12 space-y-6">
@@ -109,7 +121,7 @@ function Apps() {
                                 <div className="flex items-center gap-4">
                                     <Image
                                         src={`/apps/${app.slug}/icon.png`}
-                                        alt={`${app.name} simgesi`}
+                                        alt={t(`${app.name} simgesi`, `${app.name} icon`)}
                                         width={72}
                                         height={72}
                                         className="rounded-2xl border border-line"
@@ -117,25 +129,25 @@ function Apps() {
                                     <div>
                                         <h3 className="font-display text-2xl font-bold">{app.name}</h3>
                                         <p className="text-fg-2">
-                                            {app.subtitle} · {app.category}
+                                            {app.subtitle[lang]} · {app.category[lang]}
                                         </p>
                                     </div>
                                 </div>
 
-                                <p className="mt-6 text-lg text-fg-2 leading-relaxed">{app.tagline}</p>
+                                <p className="mt-6 text-lg text-fg-2 leading-relaxed">{app.tagline[lang]}</p>
 
                                 <ul className="mt-6 grid gap-2 sm:grid-cols-2">
                                     {app.features.slice(0, 4).map((f) => (
-                                        <li key={f.title} className="flex items-center gap-2 text-sm">
+                                        <li key={f.icon} className="flex items-center gap-2 text-sm">
                                             <span className="h-1.5 w-1.5 rounded-full bg-coral" />
-                                            {f.title}
+                                            {f.title[lang]}
                                         </li>
                                     ))}
                                 </ul>
 
                                 <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-fg-2">
                                     {app.stats.rating && <Rating value={app.stats.rating} reviews={app.stats.reviews} />}
-                                    <span>{app.stats.downloads} indirme</span>
+                                    <span>{num(app.stats.downloads)} {t("indirme", "downloads")}</span>
                                 </div>
 
                                 <div className="mt-auto pt-8 flex flex-wrap items-center gap-4">
@@ -144,7 +156,7 @@ function Apps() {
                                         href={`/apps/${app.slug}/`}
                                         className="group inline-flex items-center gap-1.5 text-sm font-semibold hover:text-coral-strong"
                                     >
-                                        Detaylar
+                                        {t("Detaylar", "Details")}
                                         <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                                     </Link>
                                 </div>
@@ -155,7 +167,7 @@ function Apps() {
                                     <Phone
                                         key={src}
                                         src={src}
-                                        alt={`${app.name} ekran görüntüsü ${i + 3}`}
+                                        alt={t(`${app.name} ekran görüntüsü ${i + 3}`, `${app.name} screenshot ${i + 3}`)}
                                         framed={app.framedScreenshots}
                                         className={`w-[30%] max-w-[170px] ${i === 1 ? "translate-y-0" : "translate-y-8"}`}
                                     />
@@ -164,7 +176,7 @@ function Apps() {
 
                             {app.reviews && (
                                 <div className="lg:col-span-2 border-t border-line bg-surface-2 py-6">
-                                    <h4 className="sr-only">{app.name} kullanıcı yorumları</h4>
+                                    <h4 className="sr-only">{t(`${app.name} kullanıcı yorumları`, `${app.name} user reviews`)}</h4>
                                     <ReviewMarquee reviews={app.reviews} />
                                 </div>
                             )}
@@ -176,15 +188,18 @@ function Apps() {
                             <FlaskConical className="w-6 h-6" />
                         </div>
                         <div>
-                            <h3 className="font-display text-lg font-bold">Yolda: {upcoming.length} yeni uygulama</h3>
+                            <h3 className="font-display text-lg font-bold">{t(`Yolda: ${upcoming.length} yeni uygulama`, `Coming soon: ${upcoming.length} new apps`)}</h3>
                             <p className="text-fg-2">
-                                Şu an kapalı testteler. Yayına çıktıklarında burada olacaklar.
+                                {t(
+                                    "Şu an kapalı testteler. Yayına çıktıklarında burada olacaklar.",
+                                    "They are in closed testing right now and will show up here once they launch.",
+                                )}
                             </p>
                             <ul className="mt-4 space-y-2">
                                 {upcoming.map((app) => (
                                     <li key={app.slug}>
                                         <span className="font-semibold">{app.name}</span>
-                                        {app.tagline && <span className="text-fg-2"> · {app.tagline}</span>}
+                                        {app.tagline && <span className="text-fg-2"> · {app.tagline[lang]}</span>}
                                     </li>
                                 ))}
                             </ul>
@@ -197,8 +212,15 @@ function Apps() {
 }
 
 function About() {
+    const { t } = useLang();
     const facts = [
-        { icon: GraduationCap, text: "Gazi Üniversitesi · Bilgisayar Mühendisliği, 4. sınıf öğrencisi" },
+        {
+            icon: GraduationCap,
+            text: t(
+                "Gazi Üniversitesi · Bilgisayar Mühendisliği, 4. sınıf öğrencisi",
+                "Gazi University · Computer Engineering, senior student",
+            ),
+        },
         { icon: MapPin, text: "Ankara, Türkiye" },
         { icon: Wrench, text: "Flutter · Dart · Supabase" },
     ];
@@ -207,26 +229,35 @@ function About() {
         <section id="about" className="py-20 md:py-28 border-t border-line bg-surface">
             <div className="container-page grid gap-12 lg:grid-cols-2 lg:gap-20">
                 <div>
-                    <SectionHeading eyebrow="Hakkında" title="Mercan Software'in arkasındaki isim" />
+                    <SectionHeading
+                        eyebrow={t("Hakkında", "About")}
+                        title={t("Mercan Software'in arkasındaki isim", "The person behind Mercan Software")}
+                    />
                     <div className="mt-10 flex items-center gap-4">
                         <div className="grid place-items-center w-16 h-16 rounded-full bg-coral-soft font-display text-xl font-bold text-coral-strong">
                             HM
                         </div>
                         <div>
                             <p className="font-display text-lg font-bold">{site.founder}</p>
-                            <p className="text-fg-2">Kurucu & geliştirici</p>
+                            <p className="text-fg-2">{t("Kurucu & geliştirici", "Founder & developer")}</p>
                         </div>
                     </div>
                 </div>
 
                 <div className="space-y-5 text-lg text-fg-2 leading-relaxed">
                     <p>
-                        Merhaba, ben <span className="text-fg font-semibold">Harun</span>. Mercan Software benim bağımsız
-                        yazılım markam. Uygulamaları baştan sona kendim tasarlıyor, geliştiriyor ve yayınlıyorum.
+                        {t("Merhaba, ben ", "Hi, I'm ")}
+                        <span className="text-fg font-semibold">Harun</span>
+                        {t(
+                            ". Mercan Software benim bağımsız yazılım markam. Uygulamaları baştan sona kendim tasarlıyor, geliştiriyor ve yayınlıyorum.",
+                            ". Mercan Software is my independent software brand. I design, build and publish every app myself, from start to finish.",
+                        )}
                     </p>
                     <p>
-                        Her uygulamayı kendim de kullanacağım gibi yapmaya çalışıyorum: sade bir arayüz, hızlı bir deneyim
-                        ve kullanıcı yorumlarını dinleyerek gelen düzenli güncellemeler.
+                        {t(
+                            "Her uygulamayı kendim de kullanacağım gibi yapmaya çalışıyorum: sade bir arayüz, hızlı bir deneyim ve kullanıcı yorumlarını dinleyerek gelen düzenli güncellemeler.",
+                            "I try to build every app the way I would want to use it myself: a clean interface, a fast experience and regular updates shaped by user feedback.",
+                        )}
                     </p>
 
                     <ul className="pt-2 space-y-3 text-base">
@@ -258,14 +289,18 @@ function About() {
 }
 
 function Contact() {
+    const { t } = useLang();
     return (
         <section id="contact" className="py-20 md:py-28 border-t border-line">
             <div className="container-page grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
                 <div>
                     <SectionHeading
-                        eyebrow="İletişim"
-                        title="Bir fikrin, önerin ya da hata bildirimin mi var?"
-                        text="Uygulamalarla ilgili her geri bildirim okunuyor. Formu doldurabilir ya da doğrudan e-posta atabilirsin."
+                        eyebrow={t("İletişim", "Contact")}
+                        title={t("Bir fikrin, önerin ya da hata bildirimin mi var?", "Got an idea, a suggestion or a bug to report?")}
+                        text={t(
+                            "Uygulamalarla ilgili her geri bildirim okunuyor. Formu doldurabilir ya da doğrudan e-posta atabilirsin.",
+                            "Every piece of feedback about the apps gets read. Fill in the form or send an email directly.",
+                        )}
                     />
                     <a
                         href={`mailto:${site.supportEmail}`}

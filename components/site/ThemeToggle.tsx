@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes";
 import { useSyncExternalStore } from "react";
 import { Moon, Sun } from "lucide-react";
+import { useLang } from "@/lib/i18n";
 
 const noop = () => () => {};
 
@@ -10,9 +11,10 @@ export function ThemeToggle() {
     // false during SSR/hydration, true on the client: the theme is only known client-side.
     const mounted = useSyncExternalStore(noop, () => true, () => false);
     const { resolvedTheme, setTheme } = useTheme();
+    const { t } = useLang();
 
     const isDark = mounted && resolvedTheme === "dark";
-    const label = isDark ? "Açık temaya geç" : "Koyu temaya geç";
+    const label = isDark ? t("Açık temaya geç", "Switch to light theme") : t("Koyu temaya geç", "Switch to dark theme");
 
     return (
         <button

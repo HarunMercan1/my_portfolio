@@ -1,9 +1,13 @@
-import Link from "next/link";
+import fs from "node:fs";
+import path from "node:path";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { apps } from "@/lib/apps";
-import { getLegalApp, legalTitles, readLegal, type LegalKind } from "@/lib/legal";
-import { LangTabs } from "./LangTabs";
+import { getLegalApp, type Lang, type LegalKind } from "@/lib/legal";
+import { LegalArticle } from "./LegalArticle";
+
+function readLegal(slug: string, kind: LegalKind, lang: Lang) {
+    return fs.readFileSync(path.join(process.cwd(), "content", "legal", slug, `${kind}.${lang}.html`), "utf8");
+}
 
 export function LegalPage({ slug, kind }: { slug: string; kind: LegalKind }) {
     const app = getLegalApp(slug);
@@ -14,21 +18,5 @@ export function LegalPage({ slug, kind }: { slug: string; kind: LegalKind }) {
     // Apps in closed testing have no public page yet, so link back home instead.
     const isLive = apps.some((a) => a.slug === slug);
 
-    return (
-        <article className="container-page max-w-3xl py-12 md:py-20">
-            <Link
-                href={isLive ? `/apps/${slug}/` : "/"}
-                className="inline-flex items-center gap-1.5 text-sm text-fg-2 hover:text-fg"
-            >
-                <ArrowLeft className="w-4 h-4" /> {isLive ? app.name : "Ana sayfa"}
-            </Link>
-
-            <header className="mt-8 border-b border-line pb-8">
-                <p className="eyebrow mb-3">{legalTitles[kind][langs[0]]}</p>
-                <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight">{app.name}</h1>
-            </header>
-
-            <LangTabs docs={docs} />
-        </article>
-    );
+    return <LegalArticle appName={app.name} kind={kind} docs={docs} backHref={isLive ? `/apps/${slug}/` : undefined} />;
 }

@@ -1,11 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import { apps } from "@/lib/apps";
 import { legalApps } from "@/lib/legal";
 import { site } from "@/lib/site";
+import { useLang } from "@/lib/i18n";
 import { Logo } from "./Logo";
 
 export function Footer() {
     const year = new Date().getFullYear();
+    const { t } = useLang();
 
     return (
         <footer className="border-t border-line bg-surface">
@@ -13,11 +17,11 @@ export function Footer() {
                 <div className="space-y-3">
                     <Logo />
                     <p className="text-sm text-fg-2 max-w-xs leading-relaxed">
-                        Sade, hızlı ve özenle yapılmış mobil uygulamalar.
+                        {t("Sade, hızlı ve özenle yapılmış mobil uygulamalar.", "Simple, fast and carefully crafted mobile apps.")}
                     </p>
                 </div>
 
-                <FooterColumn title="Uygulamalar">
+                <FooterColumn title={t("Uygulamalar", "Apps")}>
                     {apps.map((app) => (
                         <FooterLink key={app.slug} href={`/apps/${app.slug}/`}>
                             {app.name}
@@ -25,7 +29,7 @@ export function Footer() {
                     ))}
                 </FooterColumn>
 
-                <FooterColumn title="Gizlilik">
+                <FooterColumn title={t("Gizlilik", "Privacy")}>
                     {legalApps.map((app) => (
                         <FooterLink key={app.slug} href={`/apps/${app.slug}/privacy/`}>
                             {app.name}
@@ -33,8 +37,8 @@ export function Footer() {
                     ))}
                 </FooterColumn>
 
-                <FooterColumn title="Bağlantılar">
-                    <FooterLink href={`mailto:${site.supportEmail}`}>E-posta</FooterLink>
+                <FooterColumn title={t("Bağlantılar", "Links")}>
+                    <FooterLink href={`mailto:${site.supportEmail}`}>{t("E-posta", "Email")}</FooterLink>
                     {site.socials.map((s) => (
                         <FooterLink key={s.name} href={s.url} external>
                             {s.name}
@@ -45,7 +49,7 @@ export function Footer() {
 
             <div className="border-t border-line">
                 <p className="container-page py-5 text-xs text-fg-3">
-                    © {year} {site.name} · {site.founder}. Tüm hakları saklıdır.
+                    © {year} {site.name} · {site.founder}. {t("Tüm hakları saklıdır.", "All rights reserved.")}
                 </p>
             </div>
         </footer>

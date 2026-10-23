@@ -5,15 +5,18 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
+import { LangToggle } from "./LangToggle";
+import { useLang } from "@/lib/i18n";
 
 const links = [
-    { href: "/#apps", label: "Uygulamalar" },
-    { href: "/#about", label: "Hakkında" },
-    { href: "/#contact", label: "İletişim" },
+    { href: "/#apps", label: { tr: "Uygulamalar", en: "Apps" } },
+    { href: "/#about", label: { tr: "Hakkında", en: "About" } },
+    { href: "/#contact", label: { tr: "İletişim", en: "Contact" } },
 ];
 
 export function Header() {
     const [open, setOpen] = useState(false);
+    const { lang, t } = useLang();
 
     return (
         <header className="sticky top-0 z-50 border-b border-line/70 bg-bg/80 backdrop-blur-md">
@@ -27,20 +30,22 @@ export function Header() {
                             href={link.href}
                             className="px-3.5 py-2 rounded-full text-sm font-medium text-fg-2 hover:text-fg hover:bg-surface-2 transition-colors"
                         >
-                            {link.label}
+                            {link.label[lang]}
                         </Link>
                     ))}
-                    <div className="ml-2">
+                    <div className="ml-2 flex items-center gap-1">
+                        <LangToggle />
                         <ThemeToggle />
                     </div>
                 </div>
 
                 <div className="flex md:hidden items-center gap-1">
+                    <LangToggle />
                     <ThemeToggle />
                     <button
                         onClick={() => setOpen(!open)}
                         className="grid place-items-center w-9 h-9 rounded-full text-fg-2 hover:bg-surface-2"
-                        aria-label={open ? "Menüyü kapat" : "Menüyü aç"}
+                        aria-label={open ? t("Menüyü kapat", "Close menu") : t("Menüyü aç", "Open menu")}
                         aria-expanded={open}
                     >
                         {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -58,7 +63,7 @@ export function Header() {
                                 onClick={() => setOpen(false)}
                                 className="py-3 text-base font-medium text-fg-2 hover:text-fg"
                             >
-                                {link.label}
+                                {link.label[lang]}
                             </Link>
                         ))}
                     </div>
