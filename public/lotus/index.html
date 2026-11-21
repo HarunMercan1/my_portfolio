@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lotus · Dizi ve film takibi</title>
+<meta name="description" content="Lotus: dizi ve filmlerini takip et, arkadaşlarınla paylaş.">
+<meta property="og:title" content="Lotus · Dizi ve film takibi">
+<meta property="og:description" content="Dizi ve filmlerini takip et, arkadaşlarınla paylaş. 🪷">
+<meta name="theme-color" content="#0b0912">
+<meta name="robots" content="noindex">
+<style>
+  :root {
+    --bg: #0b0912;
+    --card: rgba(255,255,255,0.05);
+    --line: rgba(255,255,255,0.09);
+    --text: #f4f1fa;
+    --muted: rgba(244,241,250,0.66);
+    --accent: #a066ff;
+    --warm: #ff5c9d;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh;
+    padding: 24px 16px; overflow-x: hidden;
+    background:
+      radial-gradient(60% 40% at 20% 10%, rgba(160,102,255,0.28), transparent 70%),
+      radial-gradient(50% 40% at 90% 90%, rgba(255,92,157,0.22), transparent 70%),
+      var(--bg); }
+  main { width: 100%; max-width: 400px; text-align: center; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 28px;
+    padding: 32px 24px 26px; backdrop-filter: blur(12px);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.45); animation: rise .7s cubic-bezier(.2,.8,.2,1) both; }
+  .logo { width: 76px; height: 76px; margin: 0 auto 14px; filter: drop-shadow(0 0 22px rgba(205,100,230,0.55));
+    animation: breathe 2.6s ease-in-out infinite; }
+  h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -0.3px;
+    background: linear-gradient(90deg, var(--accent), var(--warm)); -webkit-background-clip: text;
+    background-clip: text; color: transparent; }
+  p { margin: 0 0 22px; color: var(--muted); line-height: 1.5; font-size: 15px; }
+  .code { display: inline-block; font-size: 30px; font-weight: 800; letter-spacing: 8px;
+    padding: 12px 20px 12px 28px; border-radius: 16px; margin: 0 0 22px;
+    background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.16); }
+  .btn { display: block; width: 100%; padding: 16px; border-radius: 16px; border: 0;
+    font-size: 16px; font-weight: 700; text-decoration: none; cursor: pointer; margin-top: 10px; }
+  .primary { color: #fff; background: linear-gradient(90deg, var(--accent), var(--warm));
+    box-shadow: 0 10px 30px rgba(200,90,220,0.4); }
+  .soft { color: var(--text); background: rgba(255,255,255,0.07); border: 1px solid var(--line); }
+  .btn:active { transform: scale(.98); }
+  small { display: block; margin-top: 18px; color: var(--muted); font-size: 12px; }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px) scale(.98); } to { opacity: 1; transform: none; } }
+  @keyframes breathe { 0%,100% { transform: scale(.96); } 50% { transform: scale(1.04); } }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <div class="card">
+    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+      <defs><linearGradient id="g" x1="0" y1="1" x2="1" y2="0">
+        <stop offset="0" stop-color="#a066ff"/><stop offset="1" stop-color="#ff5c9d"/></linearGradient></defs>
+      <g fill="none" stroke="url(#g)" stroke-width="3" stroke-linejoin="round">
+        <path d="M32 10c6 7 8 15 8 22s-3 15-8 18c-5-3-8-11-8-18s2-15 8-22z"/>
+        <path d="M22 22c-3 2-7 3-9 3 0 9 6 20 19 25-6-5-10-14-10-28z"/>
+        <path d="M42 22c3 2 7 3 9 3 0 9-6 20-19 25 6-5 10-14 10-28z"/>
+        <path d="M13 34c-3 0-6 1-8 2 3 8 13 14 27 14-9-3-15-9-19-16z"/>
+        <path d="M51 34c3 0 6 1 8 2-3 8-13 14-27 14 9-3 15-9 19-16z"/>
+      </g>
+    </svg>
+    <h1 id="title">Lotus</h1>
+    <p id="body">Dizi ve filmlerini takip et, arkadaşlarınla paylaş.</p>
+    <div id="code" class="code hidden"></div>
+    <a id="open" class="btn primary" href="#">Lotus'ta aç</a>
+    <a id="store" class="btn soft" href="#">Google Play'den indir</a>
+    <small id="note"></small>
+  </div>
+</main>
+<script>
+(function () {
+  var pkg = 'com.mercansoftware.lotus';
+  var q = new URLSearchParams(location.search);
+  var tr = (navigator.language || 'en').toLowerCase().indexOf('tr') === 0;
+  var t = tr ? {
+    title: 'Lotus', open: "Lotus'ta aç", store: "Google Play'den indir",
+    s: 'Arkadaşın sana bir dizi gönderdi. Lotus\'ta aç, takip et, birlikte konuşun.',
+    m: 'Arkadaşın sana bir film gönderdi. Lotus\'ta aç, listene ekle.',
+    u: 'Bir arkadaşın Lotus profilini paylaştı. Ne izlediğine bak, takip et.',
+    i: 'Lotus\'a davet edildin! Uygulamayı kur, sonra bu sayfaya geri dönüp "Lotus\'ta aç"a dokun ya da kodu gir: ikiniz de hediye kazanın.',
+    inviteTitle: 'Davetiyen hazır 🎁', def: 'Dizi ve filmlerini takip et, arkadaşlarınla paylaş.',
+    note: 'Uygulama açılmazsa önce Google Play\'den indir.'
+  } : {
+    title: 'Lotus', open: 'Open in Lotus', store: 'Get it on Google Play',
+    s: 'A friend sent you a series. Open it in Lotus, track it, talk about it together.',
+    m: 'A friend sent you a movie. Open it in Lotus and add it to your list.',
+    u: 'A friend shared their Lotus profile. See what they watch and follow them.',
+    i: 'You\'re invited to Lotus! Install the app, then come back here and tap "Open in Lotus", or enter the code: you both get a gift.',
+    inviteTitle: 'Your invite is ready 🎁', def: 'Track your shows and movies, share them with friends.',
+    note: 'If the app does not open, get it from Google Play first.'
+  };
+  var key = null, value = null;
+  ['s', 'm', 'u', 'i'].forEach(function (k) {
+    var v = q.get(k);
+    if (!key && v && /^[A-Za-z0-9-]{1,64}$/.test(v)) { key = k; value = v; }
+  });
+  var query = key ? key + '=' + encodeURIComponent(value) : '';
+  var store = 'https://play.google.com/store/apps/details?id=' + pkg +
+    (key === 'i' ? '&referrer=' + encodeURIComponent('invite=' + value) : '');
+  var deep = 'intent://open' + (query ? '?' + query : '') +
+    '#Intent;scheme=lotus;package=' + pkg + ';S.browser_fallback_url=' + encodeURIComponent(store) + ';end';
+  var android = /android/i.test(navigator.userAgent);
+
+  document.getElementById('open').textContent = t.open;
+  document.getElementById('store').textContent = t.store;
+  document.getElementById('store').href = store;
+  document.getElementById('note').textContent = t.note;
+  document.getElementById('body').textContent = key ? t[key] : t.def;
+  if (key === 'i') {
+    document.getElementById('title').textContent = t.inviteTitle;
+    var c = document.getElementById('code');
+    c.textContent = value.toUpperCase();
+    c.classList.remove('hidden');
+  }
+  var open = document.getElementById('open');
+  if (android) {
+    open.href = deep;
+    // Straight into the app when it is there; the page stays for a tap.
+    if (key) setTimeout(function () { location.href = deep; }, 350);
+  } else {
+    open.href = store;
+  }
+  document.title = (key === 'i' ? t.inviteTitle : 'Lotus') + ' · Lotus';
+})();
+</script>
+</body>
+</html>
