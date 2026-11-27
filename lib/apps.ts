@@ -4,7 +4,7 @@
  * Texts are given in both site languages; reviews stay in their original language.
  */
 
-import type { Localized } from "./i18n";
+import type { Lang, Localized } from "./i18n";
 
 export type FeatureIcon =
   | "palette"
@@ -19,7 +19,13 @@ export type FeatureIcon =
   | "pie"
   | "repeat"
   | "handshake"
-  | "download";
+  | "download"
+  | "tv"
+  | "calendar"
+  | "sparkles"
+  | "users"
+  | "eye-off"
+  | "award";
 
 export interface App {
   slug: string;
@@ -35,8 +41,10 @@ export interface App {
   features: { icon: FeatureIcon; title: Localized; text: Localized }[];
   audience: Localized[];
   screenshots: string[];
+  /** Start index for the 3 homepage card preview screenshots (defaults to 2). */
+  previewOffset?: number;
   /** Hand-picked 5-star Google Play reviews; author shortened to first name + initial. */
-  reviews?: { author: string; text: string }[];
+  reviews?: { author: string; text: string; lang?: Lang }[];
   /** Screenshots are store graphics that already include a device frame and caption, so show them as-is. */
   framedScreenshots?: boolean;
 }
@@ -91,7 +99,56 @@ export const apps: App[] = [
       { author: "Nuray Y.", text: "Çok şık ve sade olmuş, harika ve tam istediğim gibi." },
       { author: "Bahar Ç.", text: "Nihayet istediğim uygulamayı buldum, mükemmel 🌸💞" },
       { author: "Jiniret", text: "Mükemmel bir uygulama, çok kullanışlı. Ben misafir modunda kullanıyorum." },
+      { author: "Melih Ali Ç.", text: "Çok sade ve güzel bir pomodoro uygulaması olmuş, diğer karmaşık uygulamalara nazaran kullanışlı buldum. Seri olması da iyi açıkçası kendimizi takip etmek adına." },
       { author: "Cesur A.", text: "Tek kelimeyle mükemmel." },
+    ],
+  },
+  {
+    slug: "lotus",
+    name: "Lotus",
+    subtitle: { tr: "Dizi ve Film Takibi", en: "TV Show & Movie Tracker" },
+    tagline: {
+      tr: "İzlediğin her dizi ve filmi tek yerde topla, onları sevenlerle bir araya gel.",
+      en: "Keep every show and movie you watch in one place, and connect with people who love them.",
+    },
+    category: { tr: "Eğlence", en: "Entertainment" },
+    playUrl: "https://play.google.com/store/apps/details?id=com.mercansoftware.lotus",
+    stats: { rating: "5,0", reviews: "6", downloads: "1.000+", languages: "24" },
+    intro: {
+      tr: "Hangi bölümde kaldığını unutuyor ya da yeni ne izleyeceğine karar veremiyor musun? Lotus, izlediğin dizi ve filmleri zahmetsizce takip etmeni, yapay zekâ önerileri keşfetmeni ve sevdiğin yapımların topluluklarıyla buluşmanı sağlar.",
+      en: "Losing track of which episode you're on or wondering what to watch next? Lotus lets you track shows and movies effortlessly, discover AI picks tailored to your taste, and connect with fan communities.",
+    },
+    explainer: {
+      title: { tr: "Hesap açmadan da kullanılır", en: "Works without an account" },
+      text: {
+        tr: "Kütüphaneni hemen telefonunda oluşturabilirsin. Cihazlar arası eşitleme, topluluklar ve sosyal özellikler için dilediğin zaman giriş yapabilirsin. Dizi ve film bilgileri TheTVDB tarafından sağlanır.",
+        en: "Start building your library right on your phone. Sign in whenever you want cloud sync, communities and social features. Show and movie information is provided by TheTVDB.",
+      },
+    },
+    features: [
+      { icon: "tv", title: { tr: "Bölüm ve film takibi", en: "Episode & movie tracking" }, text: { tr: "Bölümleri tek dokunuşla işaretle, sezon sezon nerede kaldığını gör.", en: "Check off episodes with one tap and see how far you are in every show." } },
+      { icon: "calendar", title: { tr: "Yayın takvimi", en: "Airing calendar" }, text: { tr: "Bu hafta ve sonrasında çıkacak bölümler, yeni bölüm günü bildirim.", en: "See what airs this week and beyond, with notifications on release day." } },
+      { icon: "sparkles", title: { tr: "Yapay zekâ önerileri", en: "AI recommendations" }, text: { tr: '"Ne izlesem?" destesi zevkine göre gerekçeli yapımlar önerir.', en: '"What should I watch?" builds a tailored deck with a reason for each pick.' } },
+      { icon: "users", title: { tr: "Topluluklar ve sosyal", en: "Communities & social" }, text: { tr: "Hayran topluluklarına katıl, arkadaşlarını takip et, tepki ver ve mesajlaş.", en: "Join fan communities, follow friends, react, comment and message." } },
+      { icon: "eye-off", title: { tr: "Spoiler koruması", en: "Spoiler protection" }, text: { tr: "Bölümü izleyene kadar yorumları ve özetleri gizler.", en: "Hides comments and episode summaries until you have watched." } },
+      { icon: "award", title: { tr: "100+ rozet ve istatistik", en: "100+ badges & stats" }, text: { tr: "Toplam izleme süren, favori türlerin, izleme günlüğün ve rozetlerin.", en: "Total watch time, top genres, watch diary and over 100 badges." } },
+      { icon: "palette", title: { tr: "Koyu ve OLED tema", en: "Dark & OLED theme" }, text: { tr: "Hareketli arayüz ve OLED ekranlar için isteğe bağlı tam siyah tema.", en: "Animated dark design with an optional true black theme for OLED screens." } },
+      { icon: "languages", title: { tr: "24 dil desteği", en: "24 languages" }, text: { tr: "Türkçe, İngilizce ve 22 dilde eksiksiz kullanım.", en: "Available in Turkish, English and 22 more languages." } },
+    ],
+    audience: [
+      { tr: "Dizi tutkunları", en: "TV show fans" },
+      { tr: "Sinema severler", en: "Movie lovers" },
+      { tr: "Listeciler", en: "List makers" },
+      { tr: "Ne izlesem diyenler", en: "Anyone wondering what to watch" },
+      { tr: "Toplulukla tartışmayı sevenler", en: "Fans who love discussing shows" },
+    ],
+    screenshots: [1, 2, 3, 4, 5, 6, 7, 8].map((n) => `/apps/lotus/screen-${n}.png`),
+    framedScreenshots: true,
+    previewOffset: 0,
+    reviews: [
+      { author: "Serkan K.", text: "Aradığımı buldum lan sonunda!" },
+      { author: "Emre A.", text: "I used 2 months and I would say it's an amazing app.", lang: "en" },
+      { author: "Odöam", text: "Başarılı." },
     ],
   },
   {

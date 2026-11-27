@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Star } from "lucide-react";
-import { useLang } from "@/lib/i18n";
+import { useLang, type Lang } from "@/lib/i18n";
 
 /** Google Play–style download button. */
 export function PlayButton({ href, size = "md" }: { href: string; size?: "md" | "lg" }) {
@@ -116,26 +116,64 @@ export function SectionHeading({
     );
 }
 
-/** Auto-scrolling strip of 5-star reviews; pauses on hover, static for reduced motion. */
-export function ReviewMarquee({ reviews }: { reviews: { author: string; text: string }[] }) {
+function ReviewCard({
+    review,
+    starLabel,
+    hidden,
+    className = "",
+}: {
+    review: { author: string; text: string; lang?: Lang };
+    starLabel: string;
+    hidden?: boolean;
+    className?: string;
+}) {
+    return (
+        <li aria-hidden={hidden} className={`flex flex-col rounded-2xl border border-line bg-surface p-5 ${className}`}>
+            <div className="flex gap-0.5" aria-label={starLabel}>
+                {Array.from({ length: 5 }, (_, j) => (
+                    <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+            </div>
+            <p lang={review.lang ?? "tr"} className="mt-3 text-sm text-fg-2 leading-relaxed line-clamp-4">
+                “{review.text}”
+            </p>
+            <p className="mt-auto pt-3 text-sm font-semibold">{review.author}</p>
+        </li>
+    );
+}
+
+/** Strip of 5-star reviews: responsive grid for short lists, auto-scrolling marquee for 5+. */
+export function ReviewMarquee({
+    reviews,
+    contained,
+}: {
+    reviews: { author: string; text: string; lang?: Lang }[];
+    contained?: boolean;
+}) {
     const { t } = useLang();
+    const starLabel = t("5 yıldız", "5 stars");
+
+    if (reviews.length < 5) {
+        return (
+            <ul className={`grid gap-4 sm:grid-cols-2 lg:grid-cols-3 ${contained ? "container-page" : "px-7 md:px-10"}`}>
+                {reviews.map((r, i) => (
+                    <ReviewCard key={i} review={r} starLabel={starLabel} />
+                ))}
+            </ul>
+        );
+    }
+
     return (
         <div className="marquee overflow-hidden">
             <ul className="marquee-track flex w-max gap-4">
                 {[...reviews, ...reviews].map((r, i) => (
-                    <li
+                    <ReviewCard
                         key={i}
-                        aria-hidden={i >= reviews.length || undefined}
-                        className="w-[300px] shrink-0 rounded-2xl border border-line bg-surface p-5"
-                    >
-                        <div className="flex gap-0.5" aria-label={t("5 yıldız", "5 stars")}>
-                            {Array.from({ length: 5 }, (_, j) => (
-                                <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                            ))}
-                        </div>
-                        <p lang="tr" className="mt-3 text-sm text-fg-2 leading-relaxed line-clamp-4">“{r.text}”</p>
-                        <p className="mt-3 text-sm font-semibold">{r.author}</p>
-                    </li>
+                        review={r}
+                        starLabel={starLabel}
+                        hidden={i >= reviews.length || undefined}
+                        className="w-[300px] shrink-0"
+                    />
                 ))}
             </ul>
         </div>

@@ -4,11 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import {
     ArrowLeft,
+    Award,
     BarChart3,
     Bell,
+    Calendar,
     ChartPie,
     Cloud,
     Download,
+    EyeOff,
     Flame,
     Handshake,
     Languages,
@@ -18,6 +21,9 @@ import {
     Repeat,
     ShieldCheck,
     SlidersHorizontal,
+    Sparkles,
+    Tv,
+    Users,
     Wallet,
     type LucideIcon,
 } from "lucide-react";
@@ -40,6 +46,12 @@ const featureIcons: Record<FeatureIcon, LucideIcon> = {
     repeat: Repeat,
     handshake: Handshake,
     download: Download,
+    tv: Tv,
+    calendar: Calendar,
+    sparkles: Sparkles,
+    users: Users,
+    "eye-off": EyeOff,
+    award: Award,
 };
 
 export function AppDetail({ slug }: { slug: string }) {
@@ -115,7 +127,7 @@ export function AppDetail({ slug }: { slug: string }) {
                         <h2 className="font-display text-3xl font-bold tracking-tight">{t("Kullanıcılar ne diyor?", "What users say")}</h2>
                     </div>
                     <div className="mt-8">
-                        <ReviewMarquee reviews={app.reviews} />
+                        <ReviewMarquee reviews={app.reviews} contained />
                     </div>
                 </section>
             )}

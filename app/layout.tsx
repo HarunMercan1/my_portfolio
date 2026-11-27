@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s | Mercan Software",
   },
   description: site.description,
-  keywords: ["Mercan Software", "Harun Reşit Mercan", "Mobil Uygulama", "Android", "Flutter", "Pomodoro Elite"],
+  keywords: ["Mercan Software", "Harun Reşit Mercan", "Mobil Uygulama", "Android", "Flutter", "Pomodoro Elite", "Lotus", "Cüzdan Elite"],
   authors: [{ name: site.founder, url: site.url }],
   creator: site.founder,
   publisher: site.name,

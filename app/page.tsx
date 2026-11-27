@@ -52,9 +52,9 @@ function Hero() {
                     </div>
 
                     <dl className="rise rise-4 mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-line pt-6">
-                        <Stat value={`${num(featured.stats.rating ?? "")}★`} label={t("Play puanı", "Play rating")} />
-                        <Stat value={num(featured.stats.downloads)} label={t("İndirme", "Downloads")} />
-                        <Stat value={featured.stats.languages} label={t("Dil desteği", "Languages")} />
+                        <Stat value={String(apps.length)} label={t("Yayında uygulama", "Live apps")} />
+                        <Stat value={num("2.000+")} label={t("Toplam indirme", "Total downloads")} />
+                        <Stat value={`${num("4,9")}★`} label={t("Ortalama puan", "Avg. rating")} />
                     </dl>
                 </div>
 
@@ -112,99 +112,104 @@ function Apps() {
                 />
 
                 <div className="mt-12 space-y-6">
-                    {apps.map((app) => (
-                        <article
-                            key={app.slug}
-                            className="grid overflow-hidden rounded-3xl border border-line bg-surface shadow-card lg:grid-cols-[1fr_1.1fr]"
-                        >
-                            <div className="p-7 md:p-10 flex flex-col">
-                                <div className="flex items-center gap-4">
-                                    <Image
-                                        src={`/apps/${app.slug}/icon.png`}
-                                        alt={t(`${app.name} simgesi`, `${app.name} icon`)}
-                                        width={72}
-                                        height={72}
-                                        className="rounded-2xl border border-line"
-                                    />
-                                    <div>
-                                        <h3 className="font-display text-2xl font-bold">{app.name}</h3>
-                                        <p className="text-fg-2">
-                                            {app.subtitle[lang]} · {app.category[lang]}
-                                        </p>
+                    {apps.map((app) => {
+                        const start = app.previewOffset ?? 2;
+                        return (
+                            <article
+                                key={app.slug}
+                                className="grid overflow-hidden rounded-3xl border border-line bg-surface shadow-card lg:grid-cols-[1fr_1.1fr]"
+                            >
+                                <div className="p-7 md:p-10 flex flex-col">
+                                    <div className="flex items-center gap-4">
+                                        <Image
+                                            src={`/apps/${app.slug}/icon.png`}
+                                            alt={t(`${app.name} simgesi`, `${app.name} icon`)}
+                                            width={72}
+                                            height={72}
+                                            className="rounded-2xl border border-line"
+                                        />
+                                        <div>
+                                            <h3 className="font-display text-2xl font-bold">{app.name}</h3>
+                                            <p className="text-fg-2">
+                                                {app.subtitle[lang]} · {app.category[lang]}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <p className="mt-6 text-lg text-fg-2 leading-relaxed">{app.tagline[lang]}</p>
+
+                                    <ul className="mt-6 grid gap-2 sm:grid-cols-2">
+                                        {app.features.slice(0, 4).map((f) => (
+                                            <li key={f.icon} className="flex items-center gap-2 text-sm">
+                                                <span className="h-1.5 w-1.5 rounded-full bg-coral" />
+                                                {f.title[lang]}
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-fg-2">
+                                        {app.stats.rating && <Rating value={app.stats.rating} reviews={app.stats.reviews} />}
+                                        <span>{num(app.stats.downloads)} {t("indirme", "downloads")}</span>
+                                    </div>
+
+                                    <div className="mt-auto pt-8 flex flex-wrap items-center gap-4">
+                                        <PlayButton href={app.playUrl} />
+                                        <Link
+                                            href={`/apps/${app.slug}/`}
+                                            className="group inline-flex items-center gap-1.5 text-sm font-semibold hover:text-coral-strong"
+                                        >
+                                            {t("Detaylar", "Details")}
+                                            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                                        </Link>
                                     </div>
                                 </div>
 
-                                <p className="mt-6 text-lg text-fg-2 leading-relaxed">{app.tagline[lang]}</p>
+                                <div className="relative bg-surface-2 dots flex items-end justify-center gap-4 px-6 pt-10 overflow-hidden min-h-[320px]">
+                                    {app.screenshots.slice(start, start + 3).map((src, i) => (
+                                        <Phone
+                                            key={src}
+                                            src={src}
+                                            alt={t(`${app.name} ekran görüntüsü ${i + start + 1}`, `${app.name} screenshot ${i + start + 1}`)}
+                                            framed={app.framedScreenshots}
+                                            className={`w-[30%] max-w-[170px] ${i === 1 ? "translate-y-0" : "translate-y-8"}`}
+                                        />
+                                    ))}
+                                </div>
 
-                                <ul className="mt-6 grid gap-2 sm:grid-cols-2">
-                                    {app.features.slice(0, 4).map((f) => (
-                                        <li key={f.icon} className="flex items-center gap-2 text-sm">
-                                            <span className="h-1.5 w-1.5 rounded-full bg-coral" />
-                                            {f.title[lang]}
+                                {app.reviews && (
+                                    <div className="lg:col-span-2 border-t border-line bg-surface-2 py-6">
+                                        <h4 className="sr-only">{t(`${app.name} kullanıcı yorumları`, `${app.name} user reviews`)}</h4>
+                                        <ReviewMarquee reviews={app.reviews} />
+                                    </div>
+                                )}
+                            </article>
+                        );
+                    })}
+
+                    {upcoming.length > 0 && (
+                        <div className="flex flex-col sm:flex-row gap-4 rounded-3xl border border-dashed border-line p-7 md:p-8">
+                            <div className="grid place-items-center w-12 h-12 shrink-0 rounded-2xl bg-coral-soft text-coral-strong">
+                                <FlaskConical className="w-6 h-6" />
+                            </div>
+                            <div>
+                                <h3 className="font-display text-lg font-bold">{t(`Yolda: ${upcoming.length} yeni uygulama`, `Coming soon: ${upcoming.length} new apps`)}</h3>
+                                <p className="text-fg-2">
+                                    {t(
+                                        "Şu an kapalı testteler. Yayına çıktıklarında burada olacaklar.",
+                                        "They are in closed testing right now and will show up here once they launch.",
+                                    )}
+                                </p>
+                                <ul className="mt-4 space-y-2">
+                                    {upcoming.map((app) => (
+                                        <li key={app.slug}>
+                                            <span className="font-semibold">{app.name}</span>
+                                            {app.tagline && <span className="text-fg-2"> · {app.tagline[lang]}</span>}
                                         </li>
                                     ))}
                                 </ul>
-
-                                <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-fg-2">
-                                    {app.stats.rating && <Rating value={app.stats.rating} reviews={app.stats.reviews} />}
-                                    <span>{num(app.stats.downloads)} {t("indirme", "downloads")}</span>
-                                </div>
-
-                                <div className="mt-auto pt-8 flex flex-wrap items-center gap-4">
-                                    <PlayButton href={app.playUrl} />
-                                    <Link
-                                        href={`/apps/${app.slug}/`}
-                                        className="group inline-flex items-center gap-1.5 text-sm font-semibold hover:text-coral-strong"
-                                    >
-                                        {t("Detaylar", "Details")}
-                                        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                                    </Link>
-                                </div>
                             </div>
-
-                            <div className="relative bg-surface-2 dots flex items-end justify-center gap-4 px-6 pt-10 overflow-hidden min-h-[320px]">
-                                {app.screenshots.slice(2, 5).map((src, i) => (
-                                    <Phone
-                                        key={src}
-                                        src={src}
-                                        alt={t(`${app.name} ekran görüntüsü ${i + 3}`, `${app.name} screenshot ${i + 3}`)}
-                                        framed={app.framedScreenshots}
-                                        className={`w-[30%] max-w-[170px] ${i === 1 ? "translate-y-0" : "translate-y-8"}`}
-                                    />
-                                ))}
-                            </div>
-
-                            {app.reviews && (
-                                <div className="lg:col-span-2 border-t border-line bg-surface-2 py-6">
-                                    <h4 className="sr-only">{t(`${app.name} kullanıcı yorumları`, `${app.name} user reviews`)}</h4>
-                                    <ReviewMarquee reviews={app.reviews} />
-                                </div>
-                            )}
-                        </article>
-                    ))}
-
-                    <div className="flex flex-col sm:flex-row gap-4 rounded-3xl border border-dashed border-line p-7 md:p-8">
-                        <div className="grid place-items-center w-12 h-12 shrink-0 rounded-2xl bg-coral-soft text-coral-strong">
-                            <FlaskConical className="w-6 h-6" />
                         </div>
-                        <div>
-                            <h3 className="font-display text-lg font-bold">{t(`Yolda: ${upcoming.length} yeni uygulama`, `Coming soon: ${upcoming.length} new apps`)}</h3>
-                            <p className="text-fg-2">
-                                {t(
-                                    "Şu an kapalı testteler. Yayına çıktıklarında burada olacaklar.",
-                                    "They are in closed testing right now and will show up here once they launch.",
-                                )}
-                            </p>
-                            <ul className="mt-4 space-y-2">
-                                {upcoming.map((app) => (
-                                    <li key={app.slug}>
-                                        <span className="font-semibold">{app.name}</span>
-                                        {app.tagline && <span className="text-fg-2"> · {app.tagline[lang]}</span>}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </section>
